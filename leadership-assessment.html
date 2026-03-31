@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Executive Leadership Self-Assessment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:   #1a2640;
+      --gold:   #c9a84c;
+      --bg:     #f4f6fa;
+      --white:  #ffffff;
+      --green:  #2a9d6e;
+      --amber:  #d4870a;
+      --red:    #c0392b;
+      --text:   #1a2640;
+      --muted:  #5a6a84;
+      --border: #dce1ec;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 48px;
+    }
+
+    h1, h2, h3, h4 { font-family: 'DM Serif Display', serif; font-weight: 400; }
+
+    /* ── screens ── */
+    .screen { display: none; width: 100%; max-width: 680px; }
+    .screen.active { display: flex; flex-direction: column; gap: 20px; }
+
+    /* ══════════════════════════════════════════
+       NAME SCREEN
+    ══════════════════════════════════════════ */
+    #screen-name {
+      min-height: 100vh;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      padding: 40px 0;
+    }
+
+    .brand { text-align: center; }
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .brand h1 {
+      font-size: clamp(30px, 5.5vw, 48px);
+      color: var(--navy);
+      line-height: 1.15;
+    }
+    .brand p {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 15.5px;
+      line-height: 1.65;
+      max-width: 460px;
+    }
+
+    .name-card {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 40px;
+      width: 100%;
+      box-shadow: 0 4px 28px rgba(26,38,64,.09);
+    }
+    .name-card label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 8px;
+      letter-spacing: .3px;
+    }
+    .name-card input[type="text"],
+    .name-card input[type="email"] {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      color: var(--text);
+      background: var(--bg);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .name-card input[type="text"]:focus,
+    .name-card input[type="email"]:focus { border-color: var(--gold); }
+    .name-card input[type="text"].error,
+    .name-card input[type="email"].error { border-color: var(--red); }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .field-group { display: flex; flex-direction: column; }
+    .field-group + .field-group,
+    .field-row + .field-group { margin-top: 16px; }
+
+    .name-hint {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 480px) {
+      .field-row { grid-template-columns: 1fr; gap: 16px; }
+    }
+
+    .btn-start {
+      margin-top: 22px;
+      width: 100%;
+      padding: 16px;
+      background: var(--navy);
+      color: var(--white);
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15.5px;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: .3px;
+      transition: background .2s, transform .1s;
+    }
+    .btn-start:hover { background: #243352; }
+    .btn-start:active { transform: scale(.98); }
+
+    /* ══════════════════════════════════════════
+       ASSESSMENT SCREEN
+    ══════════════════════════════════════════ */
+    #screen-assess { padding: 8px 0 0; }
+
+    .assess-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .section-tag {
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .q-counter {
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .progress-wrap {
+      height: 5px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold), #e0b96a);
+      border-radius: 99px;
+      transition: width .4s cubic-bezier(.4,0,.2,1);
+    }
+
+    .question-card {
+      background: var(--white);
+      border-radius: 18px;
+      padding: 40px;
+      box-shadow: 0 4px 28px rgba(26,38,64,.08);
+      animation: fadeSlide .25s ease both;
+    }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .q-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(19px, 3vw, 26px);
+      color: var(--navy);
+      line-height: 1.45;
+      margin-bottom: 30px;
+    }
+
+    .scale-options { display: flex; flex-direction: column; gap: 10px; }
+
+    .scale-opt {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 13px 18px;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      user-select: none;
+    }
+    .scale-opt:hover  { border-color: var(--gold); background: #fdf9ee; }
+    .scale-opt.chosen { border-color: var(--navy); background: #edf0f8; }
+
+    .scale-opt input { display: none; }
+
+    .radio-dot {
+      width: 20px; height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      flex-shrink: 0;
+      transition: border-color .15s, background .15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .scale-opt.chosen .radio-dot {
+      border-color: var(--navy);
+      background: var(--navy);
+    }
+    .scale-opt.chosen .radio-dot::after {
+      content: '';
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--white);
+    }
+
+    .opt-label { flex: 1; }
+    .opt-num { font-weight: 700; color: var(--navy); margin-right: 6px; font-size: 15px; }
+    .opt-desc { color: var(--muted); font-size: 13.5px; }
+
+    .nav-row {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-nav {
+      flex: 1;
+      padding: 14px;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .18s, border-color .18s, transform .1s;
+      border: 2px solid var(--border);
+      background: var(--white);
+      color: var(--text);
+    }
+    .btn-nav:hover:not(:disabled) { border-color: var(--navy); background: #edf0f8; }
+    .btn-nav:disabled { opacity: .35; cursor: not-allowed; }
+    .btn-nav.primary {
+      background: var(--navy);
+      color: var(--white);
+      border-color: var(--navy);
+    }
+    .btn-nav.primary:hover:not(:disabled) { background: #243352; }
+    .btn-nav.primary:disabled {
+      background: var(--border);
+      border-color: var(--border);
+      color: var(--muted);
+    }
+    .btn-nav:active:not(:disabled) { transform: scale(.97); }
+
+    /* ══════════════════════════════════════════
+       REPORT SCREEN
+    ══════════════════════════════════════════ */
+    #screen-report { padding: 0 0 8px; }
+
+    .report-hero {
+      background: var(--navy);
+      border-radius: 18px;
+      padding: 44px 40px;
+      text-align: center;
+      color: var(--white);
+    }
+    .report-hero .eyebrow { color: var(--gold); }
+    .report-hero h2 {
+      font-size: clamp(22px, 4vw, 34px);
+      margin-top: 6px;
+      line-height: 1.2;
+    }
+    .hero-name {
+      font-size: 17px;
+      opacity: .65;
+      margin-top: 4px;
+      margin-bottom: 28px;
+    }
+    .hero-date {
+      font-size: 13px;
+      opacity: .45;
+      margin-top: 2px;
+      margin-bottom: 28px;
+    }
+
+    .score-ring {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .score-circle {
+      width: 108px; height: 108px;
+      border-radius: 50%;
+      border: 4px solid;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .score-circle.green { border-color: #4fd4a0; }
+    .score-circle.amber { border-color: #f9c55d; }
+    .score-circle.red   { border-color: #e07b72; }
+    .score-big {
+      font-family: 'DM Serif Display', serif;
+      font-size: 36px;
+      line-height: 1;
+    }
+    .score-of { font-size: 12px; opacity: .55; }
+    .ring-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      opacity: .6;
+    }
+
+    .insight-chips {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 24px;
+    }
+    .chip {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 99px;
+      padding: 8px 18px;
+      font-size: 13px;
+      color: rgba(255,255,255,.8);
+    }
+    .chip strong { color: var(--gold); font-weight: 600; }
+
+    /* action buttons row */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .btn-action {
+      flex: 1;
+      min-width: 130px;
+      padding: 13px 16px;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 2px solid var(--border);
+      background: var(--white);
+      color: var(--navy);
+      transition: background .18s, border-color .18s;
+      text-align: center;
+    }
+    .btn-action:hover { border-color: var(--navy); background: #edf0f8; }
+    .btn-action.gold {
+      background: var(--gold); color: var(--white); border-color: var(--gold);
+    }
+    .btn-action.gold:hover { background: #b8923d; border-color: #b8923d; }
+    .btn-action.dark {
+      background: var(--navy); color: var(--white); border-color: var(--navy);
+    }
+    .btn-action.dark:hover { background: #243352; }
+    .btn-action:active { transform: scale(.97); }
+
+    .copy-feedback {
+      text-align: center;
+      font-size: 13px;
+      color: var(--green);
+      min-height: 18px;
+      font-weight: 500;
+    }
+
+    /* section accordion */
+    .section-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .sec-card {
+      background: var(--white);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(26,38,64,.06);
+    }
+
+    .sec-head {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 22px;
+      cursor: pointer;
+      user-select: none;
+      transition: background .15s;
+    }
+    .sec-head:hover { background: #fafbfd; }
+
+    .sec-badge {
+      width: 50px; height: 50px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'DM Serif Display', serif;
+      font-size: 19px;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .sec-badge.green { background: var(--green); }
+    .sec-badge.amber { background: var(--amber); }
+    .sec-badge.red   { background: var(--red); }
+
+    .sec-info { flex: 1; min-width: 0; }
+    .sec-info h3 { font-size: 16px; color: var(--navy); }
+    .sec-sub { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+
+    .sec-chevron {
+      font-size: 18px;
+      color: var(--muted);
+      transition: transform .22s;
+      flex-shrink: 0;
+    }
+    .sec-card.open .sec-chevron { transform: rotate(180deg); }
+
+    .sec-body {
+      display: none;
+      padding: 4px 22px 20px;
+      border-top: 1px solid var(--border);
+    }
+    .sec-card.open .sec-body { display: block; }
+
+    .q-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .q-row:last-child { border-bottom: none; }
+    .q-row-text {
+      flex: 1;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--text);
+    }
+    .pips-wrap {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .pip {
+      width: 11px; height: 11px;
+      border-radius: 3px;
+      background: var(--border);
+    }
+    .pip.on.green { background: var(--green); }
+    .pip.on.amber { background: var(--amber); }
+    .pip.on.red   { background: var(--red); }
+    .pip-num {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-left: 5px;
+      min-width: 28px;
+      text-align: right;
+    }
+
+    /* toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(70px);
+      background: #1a2640ee;
+      color: var(--white);
+      padding: 11px 22px;
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,.2);
+      transition: transform .28s cubic-bezier(.4,0,.2,1);
+      z-index: 999;
+      backdrop-filter: blur(8px);
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ── responsive ── */
+    @media (max-width: 480px) {
+      body { padding: 16px 12px 40px; }
+      .name-card, .question-card { padding: 26px 20px; }
+      .report-hero { padding: 32px 22px; }
+      .sec-head { padding: 16px 16px; }
+      .sec-body { padding: 4px 16px 18px; }
+      .nav-row { flex-direction: column-reverse; }
+      .action-row { flex-direction: column; }
+      .insight-chips { flex-direction: column; align-items: center; }
+    }
+
+    /* ── print ── */
+    @media print {
+      body { background: #fff; padding: 0; }
+      .screen { display: none !important; }
+      #screen-report { display: flex !important; }
+      .action-row, .copy-feedback, .toast, .sec-chevron { display: none !important; }
+      .sec-body { display: block !important; }
+      .sec-head { cursor: default; }
+      .report-hero {
+        background: var(--navy) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border-radius: 0;
+      }
+      .sec-card { box-shadow: none; border: 1px solid var(--border); page-break-inside: avoid; }
+      .sec-badge {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .pip.on {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ SCREEN 1: Name Entry ══ -->
+<div id="screen-name" class="screen active">
+  <div class="brand">
+    <p class="eyebrow">Leadership Diagnostic</p>
+    <h1>Executive<br>Self-Assessment</h1>
+    <p>A reflective diagnostic across five key dimensions of executive leadership. Takes about 5–8 minutes. Your responses are not stored.</p>
+  </div>
+
+  <div class="name-card">
+    <div class="field-row">
+      <div class="field-group">
+        <label for="input-first">First Name</label>
+        <input type="text" id="input-first" placeholder="Jane" autocomplete="given-name" />
+      </div>
+      <div class="field-group">
+        <label for="input-last">Last Name</label>
+        <input type="text" id="input-last" placeholder="Smith" autocomplete="family-name" />
+      </div>
+    </div>
+    <div class="field-group">
+      <label for="input-email">Email Address</label>
+      <input type="email" id="input-email" placeholder="jane@company.com" autocomplete="email" />
+    </div>
+    <p class="name-hint">29 questions · Scored 1–5 · Results grouped by dimension</p>
+    <button class="btn-start" onclick="startAssessment()">Begin Assessment &rarr;</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 2: Assessment ══ -->
+<div id="screen-assess" class="screen">
+  <div class="assess-meta">
+    <span class="section-tag" id="sec-label"></span>
+    <span class="q-counter" id="q-counter"></span>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+
+  <div class="question-card" id="question-card">
+    <p class="q-text" id="q-text"></p>
+    <div class="scale-options" id="scale-opts"></div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn-nav" id="btn-back" onclick="goBack()" disabled>← Back</button>
+    <button class="btn-nav primary" id="btn-next" onclick="goNext()" disabled>Next →</button>
+  </div>
+</div>
+
+<!-- ══ SCREEN 3: Report ══ -->
+<div id="screen-report" class="screen">
+  <div class="report-hero" id="report-hero"></div>
+
+  <div class="action-row">
+    <button class="btn-action gold" onclick="copyReport()">Copy Report Text</button>
+    <button class="btn-action" onclick="window.print()">Print / Save PDF</button>
+    <button class="btn-action dark" onclick="retake()">Retake Assessment</button>
+  </div>
+  <div class="copy-feedback" id="copy-feedback"></div>
+
+  <div class="section-list" id="section-list"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════
+// DATA
+// ════════════════════════════════════════════════
+const SECTIONS = [
+  {
+    id: 'identity',
+    name: 'Identity and Authority',
+    questions: [
+      "I feel like a legitimate leader.",
+      "I believe I deserve authority.",
+      "I am comfortable being visible as the face of the company.",
+      "I don't secretly fear being \"found out.\"",
+      "I am willing to make decisions that may disappoint others."
+    ]
+  },
+  {
+    id: 'structure',
+    name: 'Structure and Clarity',
+    questions: [
+      "This company is built intentionally and strategically.",
+      "Roles in my company are clearly defined.",
+      "My team knows what \"good performance\" looks like.",
+      "We have consistent meeting rhythms.",
+      "I spend time working on the business in a consistent way.",
+      "People know who has decision authority in each part of our business."
+    ]
+  },
+  {
+    id: 'delegation',
+    name: 'Delegation and Trust',
+    questions: [
+      "I trust others with meaningful responsibility.",
+      "I allow others to do things differently than I would.",
+      "I am not the bottleneck in most decisions.",
+      "I delegate outcomes, not just tasks.",
+      "I invest time developing people, not just assigning work.",
+      "I am building capacity in this company beyond my own vision or work ethic."
+    ]
+  },
+  {
+    id: 'communication',
+    name: 'Communication and Courage',
+    questions: [
+      "I lead my team with clarity and decisiveness.",
+      "I address issues quickly.",
+      "I give clear expectations.",
+      "I don't expect people to read my mind.",
+      "I don't avoid hard conversations.",
+      "My feedback is direct and timely."
+    ]
+  },
+  {
+    id: 'sustainability',
+    name: 'Sustainability and Scale',
+    questions: [
+      "We are building for market durability, not just reactive survival.",
+      "I am not constantly reactive.",
+      "My schedule reflects my priorities.",
+      "I feel less isolated than I did a year ago.",
+      "I am building leaders, not just employees.",
+      "I have time to think about the future."
+    ]
+  }
+];
+
+const LABELS = {
+  1: 'Rarely or not at all true',
+  2: 'Sometimes true',
+  3: 'Often true',
+  4: 'Usually true',
+  5: 'Almost always true'
+};
+
+// ════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════
+// To receive email alerts, get a free access key at https://web3forms.com
+// Enter your email (daniel@spacecreator.com), verify it, paste the key below.
+const WEB3FORMS_KEY = '03df796d-fc8f-4c18-8fec-ac56b98b70db';
+
+// ════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════
+let firstName = '', lastName = '', email = '', fullName = '';
+let questions = [];   // shuffled flat list: {id, sectionId, sectionName, text}
+let answers  = {};    // id → score (1–5)
+let current  = 0;
+let advancing = false; // debounce auto-advance
+
+// ════════════════════════════════════════════════
+// HELPERS
+// ════════════════════════════════════════════════
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function color(score) {
+  if (score >= 4)   return 'green';
+  if (score >= 2.5) return 'amber';
+  return 'red';
+}
+
+function round1(n) { return Math.round(n * 10) / 10; }
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+// ════════════════════════════════════════════════
+// NAME SCREEN
+// ════════════════════════════════════════════════
+document.getElementById('input-email').addEventListener('keydown', e => {
+  if (e.key === 'Enter') startAssessment();
+});
+
+function startAssessment() {
+  const fEl = document.getElementById('input-first');
+  const lEl = document.getElementById('input-last');
+  const eEl = document.getElementById('input-email');
+
+  firstName = fEl.value.trim();
+  lastName  = lEl.value.trim();
+  email     = eEl.value.trim();
+  fullName  = `${firstName} ${lastName}`.trim();
+
+  let valid = true;
+  [
+    [fEl, !firstName],
+    [lEl, !lastName],
+    [eEl, !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)]
+  ].forEach(([el, bad]) => {
+    if (bad) { el.classList.add('error'); setTimeout(() => el.classList.remove('error'), 1500); valid = false; }
+  });
+
+  if (!valid) { [fEl, lEl, eEl].find(el => !el.value.trim())?.focus(); return; }
+
+  // Build shuffled question list
+  const flat = [];
+  SECTIONS.forEach(sec => {
+    sec.questions.forEach((text, i) => {
+      flat.push({ id: `${sec.id}_${i}`, sectionId: sec.id, sectionName: sec.name, text });
+    });
+  });
+  questions = shuffle(flat);
+  answers   = {};
+  current   = 0;
+
+  renderQuestion();
+  showScreen('screen-assess');
+}
+
+// ════════════════════════════════════════════════
+// ASSESSMENT SCREEN
+// ════════════════════════════════════════════════
+function renderQuestion() {
+  const total = questions.length;
+  const q     = questions[current];
+  const answered = Object.keys(answers).length;
+
+  document.getElementById('sec-label').textContent  = q.sectionName;
+  document.getElementById('q-counter').textContent  = `${current + 1} of ${total}`;
+  document.getElementById('progress-fill').style.width = `${Math.round((answered / total) * 100)}%`;
+
+  // Animate card
+  const card = document.getElementById('question-card');
+  card.style.animation = 'none';
+  void card.offsetWidth;
+  card.style.animation = '';
+
+  document.getElementById('q-text').textContent = q.text;
+
+  const container = document.getElementById('scale-opts');
+  container.innerHTML = '';
+
+  for (let v = 1; v <= 5; v++) {
+    const chosen = answers[q.id] === v;
+    const lbl = document.createElement('label');
+    lbl.className = 'scale-opt' + (chosen ? ' chosen' : '');
+    lbl.innerHTML = `
+      <input type="radio" name="scale" value="${v}"${chosen ? ' checked' : ''}>
+      <div class="radio-dot"></div>
+      <div class="opt-label">
+        <span class="opt-num">${v}</span><span class="opt-desc">— ${LABELS[v]}</span>
+      </div>`;
+    lbl.addEventListener('click', () => pick(v));
+    container.appendChild(lbl);
+  }
+
+  document.getElementById('btn-back').disabled = current === 0;
+  const last = current === total - 1;
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.textContent  = last ? 'See Results →' : 'Next →';
+  nextBtn.disabled     = answers[q.id] === undefined;
+}
+
+function pick(value) {
+  if (advancing) return;
+  const q = questions[current];
+  answers[q.id] = value;
+  renderQuestion();
+
+  // Auto-advance (not on last question)
+  if (current < questions.length - 1) {
+    advancing = true;
+    setTimeout(() => { advancing = false; goNext(); }, 340);
+  }
+}
+
+function goNext() {
+  const q = questions[current];
+  if (answers[q.id] === undefined) return;
+  if (current < questions.length - 1) {
+    current++;
+    renderQuestion();
+  } else {
+    buildReport();
+    sendNotification();
+    showScreen('screen-report');
+  }
+}
+
+function goBack() {
+  if (current > 0) { current--; renderQuestion(); }
+}
+
+// ════════════════════════════════════════════════
+// REPORT
+// ════════════════════════════════════════════════
+function calcResults() {
+  const sectionData = SECTIONS.map(sec => {
+    const qs = sec.questions.map((text, i) => ({
+      id:    `${sec.id}_${i}`,
+      text,
+      score: answers[`${sec.id}_${i}`] || 0
+    }));
+    const avg = round1(qs.reduce((s, q) => s + q.score, 0) / qs.length);
+    return { ...sec, qs, avg };
+  });
+
+  const overall   = round1(sectionData.reduce((s, d) => s + d.avg, 0) / sectionData.length);
+  const strongest = sectionData.reduce((a, b) => a.avg >= b.avg ? a : b);
+  const weakest   = sectionData.reduce((a, b) => a.avg <= b.avg ? a : b);
+
+  return { sectionData, overall, strongest, weakest };
+}
+
+function buildReport() {
+  const { sectionData, overall, strongest, weakest } = calcResults();
+  const c    = color(overall);
+  const date = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+  // Hero
+  document.getElementById('report-hero').innerHTML = `
+    <p class="eyebrow">Assessment Complete</p>
+    <h2>Leadership Self-Assessment</h2>
+    <p class="hero-name">${escHtml(fullName)}</p>
+    <p class="hero-date">${escHtml(email)} &middot; ${date}</p>
+    <div class="score-ring">
+      <div class="score-circle ${c}">
+        <span class="score-big">${overall}</span>
+        <span class="score-of">out of 5</span>
+      </div>
+      <span class="ring-label">Overall Score</span>
+    </div>
+    <div class="insight-chips">
+      <div class="chip">Strongest: <strong>${escHtml(strongest.name)}</strong> &middot; ${strongest.avg}</div>
+      <div class="chip">Growth Area: <strong>${escHtml(weakest.name)}</strong> &middot; ${weakest.avg}</div>
+    </div>`;
+
+  // Section cards
+  const list = document.getElementById('section-list');
+  list.innerHTML = '';
+
+  sectionData.forEach((sec, idx) => {
+    const c2 = color(sec.avg);
+    const card = document.createElement('div');
+    card.className = 'sec-card' + (idx === 0 ? ' open' : '');
+
+    const qRows = sec.qs.map(q => {
+      const qc   = color(q.score);
+      const pips = Array.from({ length: 5 }, (_, i) =>
+        `<div class="pip${i < q.score ? ` on ${qc}` : ''}"></div>`
+      ).join('');
+      return `<div class="q-row">
+        <div class="q-row-text">${escHtml(q.text)}</div>
+        <div class="pips-wrap">${pips}<span class="pip-num">${q.score}/5</span></div>
+      </div>`;
+    }).join('');
+
+    card.innerHTML = `
+      <div class="sec-head" onclick="this.parentElement.classList.toggle('open')">
+        <div class="sec-badge ${c2}">${sec.avg}</div>
+        <div class="sec-info">
+          <h3>${escHtml(sec.name)}</h3>
+          <p class="sec-sub">${sec.qs.length} questions &middot; Average: ${sec.avg} / 5</p>
+        </div>
+        <span class="sec-chevron">&#9662;</span>
+      </div>
+      <div class="sec-body">${qRows}</div>`;
+
+    list.appendChild(card);
+  });
+}
+
+// ════════════════════════════════════════════════
+// COPY REPORT
+// ════════════════════════════════════════════════
+function copyReport() {
+  const { sectionData, overall, strongest, weakest } = calcResults();
+  const date = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  const line = '─'.repeat(52);
+
+  let txt = `EXECUTIVE LEADERSHIP SELF-ASSESSMENT\n`;
+  txt += `${fullName}\n`;
+  txt += `${email}\n`;
+  txt += `${date}\n\n`;
+  txt += `Overall Score:    ${overall} / 5\n`;
+  txt += `Strongest:        ${strongest.name} (${strongest.avg})\n`;
+  txt += `Growth Area:      ${weakest.name} (${weakest.avg})\n`;
+  txt += `\n${line}\n\n`;
+
+  sectionData.forEach(sec => {
+    txt += `${sec.name.toUpperCase()}\n`;
+    txt += `Section Average: ${sec.avg} / 5\n\n`;
+    sec.qs.forEach(q => {
+      const bar = '█'.repeat(q.score) + '░'.repeat(5 - q.score);
+      txt += `  [${bar}] ${q.score}/5  ${q.text}\n`;
+    });
+    txt += '\n';
+  });
+
+  txt += `${line}\n`;
+  txt += `Generated by Executive Leadership Self-Assessment`;
+
+  navigator.clipboard.writeText(txt).then(() => {
+    const fb = document.getElementById('copy-feedback');
+    fb.textContent = '✓ Report copied to clipboard';
+    setTimeout(() => fb.textContent = '', 3200);
+    toast('Report copied to clipboard');
+  }).catch(() => toast('Clipboard unavailable — try selecting and copying manually.'));
+}
+
+// ════════════════════════════════════════════════
+// RETAKE
+// ════════════════════════════════════════════════
+function retake() {
+  document.getElementById('input-first').value = '';
+  document.getElementById('input-last').value  = '';
+  document.getElementById('input-email').value = '';
+  firstName = ''; lastName = ''; email = ''; fullName = '';
+  questions = []; answers = {}; current = 0;
+  showScreen('screen-name');
+  setTimeout(() => document.getElementById('input-first').focus(), 400);
+}
+
+// ════════════════════════════════════════════════
+// NOTIFICATION (Web3Forms — free at web3forms.com)
+// ════════════════════════════════════════════════
+function sendNotification() {
+  if (!WEB3FORMS_KEY || WEB3FORMS_KEY === 'YOUR_ACCESS_KEY_HERE') return;
+
+  const { sectionData, overall, strongest, weakest } = calcResults();
+  const date = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+
+  let body = `New assessment completed.\n\n`;
+  body += `Name:   ${fullName}\n`;
+  body += `Email:  ${email}\n`;
+  body += `Date:   ${date}\n`;
+  body += `Overall Score: ${overall} / 5\n`;
+  body += `Strongest:     ${strongest.name} (${strongest.avg})\n`;
+  body += `Growth Area:   ${weakest.name} (${weakest.avg})\n\n`;
+  body += `─────────────────────────────────────\n\n`;
+
+  sectionData.forEach(sec => {
+    body += `${sec.name}: ${sec.avg} / 5\n`;
+    sec.qs.forEach(q => {
+      const bar = '█'.repeat(q.score) + '░'.repeat(5 - q.score);
+      body += `  [${bar}] ${q.score}/5  ${q.text}\n`;
+    });
+    body += '\n';
+  });
+
+  fetch('https://api.web3forms.com/submit', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      access_key:   WEB3FORMS_KEY,
+      subject:      `Leadership Assessment completed — ${fullName}`,
+      from_name:    'Leadership Assessment Tool',
+      replyto:      email,
+      message:      body
+    })
+  }).catch(() => {}); // silent — never block the user on notification failure
+}
+
+// ════════════════════════════════════════════════
+// UTILITY
+// ════════════════════════════════════════════════
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
